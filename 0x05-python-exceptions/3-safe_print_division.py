@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 def safe_print_division(a, b):
     try:
-        res = a / b
-        print("Inside result: {:.1f}".format(res))
+        result = a / b
     except:
-        res = None
-        print("Inside result: {}".format(res))
+        result = None
     finally:
-        return res
+        print("Inside result: {}".format(result))
+        return result

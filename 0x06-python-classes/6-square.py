@@ -1,22 +1,26 @@
 #!/usr/bin/python3
 """creates class Square with
-private instance attribute size and public instance method"""
+private instance attribute size and position and
+public instance methods to calculate area and print square"""
 
 
 class Square:
-    """defines class with instantiated and validated private instance attribute
-and public instance method."""
+    """defines class with private instance attributes size and position
+and public instance methods to calculate area and print square."""
 
     def __init__(self, size=0, position=(0, 0)):
-        self.__size = size
-        self.__position = position
+        """instantiates attribute size to 0 and position to (0, 0)"""
+        self.size = size
+        self.position = position
 
     @property
     def size(self):
+        """get the private instance attribute size"""
         return(self.__size)
 
     @size.setter
     def size(self, value):
+        """sets the private instance attribute size"""
         if type(value) is not int:
             raise TypeError("size must be an integer")
         elif value < 0:
@@ -25,17 +29,27 @@ and public instance method."""
 
     @property
     def position(self):
-        return(self.__property)
+        """gets the private instance attribute position"""
+        return(self.__position)
 
     @position.setter
     def position(self, value):
-        if type(value) is not tuple:
+        """sets the private instance attribute position"""
+        check = 0
+        while 1:
+            if type(value) is not tuple or len(value) is not 2:
+                check += 1
+                break
+            if type(value[0]) is not int or type(value[1]) is not int:
+                check += 1
+                break
+            if value[0] < 0 or value[1] < 0:
+                check += 1
+            break
+        if check is 0:
+            self.__position = value
+        else:
             raise TypeError("position must be a tuple of 2 positive integers")
-            elif type(value[0]) is not int or type(value[2]) is not int:
-            raise TypeError("position must be a tuple of 2 positive integers")
-            elif value[0] < 0 or value[1] < 0:
-            raise TypeError("position must be a tuple of 2 positive integers")
-        self.__position = position
 
     def area(self):
         """calculates and returns current square area"""

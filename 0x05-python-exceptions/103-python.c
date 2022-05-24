@@ -1,74 +1,120 @@
-#include <stdio.h>
 #include <Python.h>
+#include <stdio.h>
 
-
-/**
-* print_python_bytes - print some basic info about Python bytes objects
-* @p: python object
-* Return: nothing
-**/
-void print_python_bytes(PyObject *p)
-{
-	char *s;
-	Py_ssize_t len, i;
-
-	printf("[.] bytes object info\n");
-	if (!PyBytes_Check(p))
-		printf("  [ERROR] Invalid Bytes Object\n");
-	else
-	{
-		len = ((PyVarObject *)p)->ob_size;
-		printf("  size: %lu\n", len);
-		s = ((PyBytesObject *)p)->ob_sval;
-		printf("  trying string: %s\n", s);
-		if (len > 10)
-			len = 10;
-		else
-			len++;
-		printf("  first %lu bytes: ", len);
-		for (i = 0; i < len - 1; i++)
-			printf("%02x ", s[i] & 0xff);
-		printf("%02x\n", s[len - 1] & 0xff);
-	}
-}
-
-void print_python_float(PyObject *p)
-{
-	printf("[.] float object info\n");
-	if (!PyFloat_Check(p))
-		printf("  [ERROR] Invalid Float Object\n");
-	else
-		printf("  value: %f\n", ((PyFloatObject *)p)->ob_fval);
-}
+int isValidStr(const char *s);
+void print_python_list(PyObject *p);
+void print_python_float(PyObject *p);
+void print_python_bytes(PyObject *p);
 
 /**
-* print_python_list - print some basic info about Python lists
-* @p: python object
-* Return: nothing
-**/
+ * print_python_list - ?
+ * @p: ?
+ */
 void print_python_list(PyObject *p)
 {
-	Py_ssize_t size, i;
-	PyObject *in_list;
+	unsigned int size;
+	unsigned int allocated;
+	unsigned int i_idex; /* item index */
+	const char *i_name; /* item name */
+	PyObject *item;
 
 	printf("[*] Python list info\n");
 	if (!PyList_Check(p))
-		printf("  [ERROR] Invalid List Object\n");
-	else
 	{
-		size = ((PyVarObject *)p)->ob_size;
-		printf("[*] Size of the Python List = %lu\n", size);
-		printf("[*] Allocated = %lu\n", ((PyListObject *)p)->allocated);
-		for (i = 0; i < size; i++)
-		{
-			in_list = ((PyListObject *)p)->ob_item[i];
-			printf("Element %lu: %s\n", i,
-			       in_list->ob_type->tp_name);
-			if (strcmp(in_list->ob_type->tp_name, "bytes") == 0)
-				print_python_bytes(in_list);
-			else if (strcmp(in_list->ob_type->tp_name,
-					"float") == 0)
-				print_python_float(in_list);
-		}
+		printf("  [ERROR] Invalid List Object\n");
+		return;
 	}
+	size = (unsigned int) ((PyVarObject *)(p))->ob_size;
+	allocated = ((PyListObject *)p)->allocated;
+
+	printf("[*] Size of the Python List = %d\n", size);
+	printf("[*] Allocated = %d\n", allocated);
+
+	for (i_idex = 0; i_idex < size; i_idex++)
+	{
+		item = ((PyListObject *)p)->ob_item[i_idex];
+		i_name = item->ob_type->tp_name;
+		printf("Element %d: %s\n", i_idex, i_name);
+		if (strcmp("bytes", i_name) == 0)
+			print_python_bytes(item);
+		else if (strcmp("float", i_name) == 0)
+			print_python_float(item);
+	}
+
+}
+
+/**
+ * print_python_bytes - ?
+ * @p: ?
+ */
+void print_python_bytes(PyObject *p)
+{
+	unsigned int size;
+	const char *str;
+	unsigned int s_idx; /* str index */
+
+	printf("[.] bytes object info\n");
+	if (!PyBytes_Check(p))
+	{
+		printf("  [ERROR] Invalid Bytes Object\n");
+		return;
+	}
+
+	size = (unsigned int) PyBytes_Size(p);
+	printf("  size: %u\n", size);
+	printf("  trying string: ");
+
+	/* Create my own PyByte_AsString()*/
+	str = ((PyBytesObject *)p)->ob_sval;
+
+	if (isValidStr(str))
+		printf("%s\n", str);
+	else
+		printf("??\n");
+
+	printf("  first %d bytes: ", (size > 9) ? 10 : size + 1);
+	for (s_idx = 0; s_idx < size + 1 && s_idx < 10; s_idx++)
+	{
+		printf("%02x", str[s_idx] & 0xFF);
+		if (s_idx + 1 < size + 1 && s_idx + 1 < 10)
+			putchar(' ');
+		else
+			putchar('\n');
+	}
+
+
+}
+
+/**
+ * print_python_float - ?
+ * @p: ?
+ */
+void print_python_float(PyObject *p)
+{
+
+	printf("[.] float object info\n");
+	if (!PyFloat_Check(p))
+	{
+		printf("  [ERROR] Invalid Float Object\n");
+		return;
+	}
+
+	printf("  value: %s\n", PyOS_double_to_string(PyFloat_AsDouble(p),
+				'r', 0, Py_DTSF_ADD_DOT_0, Py_DTST_FINITE));
+}
+
+/**
+ * isValidStr - ?
+ * @s: ?
+ * Return: ?
+ */
+int isValidStr(const char *s)
+{
+	while (*s)
+	{
+		if (*s < ' ' || '~' < *s) /* revisar si no es desde 0 */
+			return (0);
+		s++;
+	}
+	return (1);
 }

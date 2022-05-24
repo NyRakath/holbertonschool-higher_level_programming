@@ -19,4 +19,3 @@ def roman_to_int(roman_string):
                 int_num[i] *= -1
 
     return sum(int_num)
-

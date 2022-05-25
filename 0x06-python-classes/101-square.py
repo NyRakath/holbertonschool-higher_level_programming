@@ -1,47 +1,64 @@
 #!/usr/bin/python3
-class Node:
-    def __init__(self, data, next=None):
-        self.data = data
-        self.next = next
+"""
+This is a Square class.
+The Square class creates a square, calculates its area and prints it with #.
+"""
+
+
+class Square:
+    """
+    Initialize Square object
+    """
+    def __init__(self, size=0, position=(0,0)):
+        self.size = size
+        self.position = position
+        self.my_print()
 
     @property
-    def data(self):
-        return self.__data
+    def size(self):
+        return self.__size
 
-    @data.setter
-    def data(self, value):
+    @size.setter
+    def size(self, value):
         if not isinstance(value, int):
-            raise TypeError("data must be an integer")
+            raise TypeError("size must be an integer")
+        elif value < 0:
+            raise ValueError("size must be >= 0")
         else:
-            self.__data = value
+            self.__size = value
 
     @property
-    def next(self):
-        return self.__next
+    def position(self):
+        return self.__position
 
-    @next.setter
-    def next(self, value):
-        if value is None:
-            self.__next = value
-        elif isinstance(value, Node):
-            self.__next = value
+    @position.setter
+    def position(self, value):
+        if not (isinstance(value, tuple) or len(value) == 2):
+            raise TypeError("position must be a tuple of 2 positive integers")
+        elif not (value[0] >= 0 and value[1] >= 0):
+            raise TypeError("position must be a tuple of 2 positive integers")
         else:
-            raise TypeError("next must be a Node object")
+            self.__position = value
 
-class SinglyLinkedList:
-    def __init__(self):
-        self.__head = None
+    """
+    Return area of Square object
+    """
+    def area(self):
+        return (self.size * self.size)
 
-    def sorted_insert(self, value):
-        newNode = Node(value, None)
-        if self.__head is None:
-            self__.head = newNode
-        else:
-            tmp = self.__head
-            while(tmp.next):
-                if tmp.data < value and tmp.next.data > value:
-                    newNode.next = tmp.next
-                    tmp.next = newNode
-                    return
-                tmp = tmp.next
-            tmp.next = newNode
+    """
+    Print the square with #
+    """
+    def my_print(self):
+        if self.size == 0:
+            print()
+            return
+        for l in range(self.position[1]):
+            print()
+        for i in range(self.size):
+            for k in range(self.position[0]):
+                print(" ", end="")
+            for j in range(self.size):
+                print("#", end="")
+            print()
+            

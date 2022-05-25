@@ -9,7 +9,7 @@ class Square:
     """
     Initialize Square object
     """
-    def __init__(self, size=0, position=(0,0)):
+    def __init__(self, size=0, position=(0, 0)):
         self.size = size
         self.position = position
         self.my_print()
@@ -61,4 +61,3 @@ class Square:
             for j in range(self.size):
                 print("#", end="")
             print()
-            

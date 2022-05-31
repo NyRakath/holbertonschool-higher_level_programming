@@ -1,32 +1,27 @@
 #!/usr/bin/python3
-"""Module to find the max integer in a list
+"""Unittest for max_integer([..])
 """
 
-
 import unittest
+max_integer = __import__('6-max_integer').max_integer
 
 
-def max_integer(list=[]):
-    """Doc
-    """
-    if len(list) == 0:
-        return None
-    result = list[0]
-    i = 1
-    while i < len(list):
-        if list[i] > result:
-            result = list[i]
-        i += 1
+class TestMaxInteger(unittest.TestCase):
+    """contains test functions for max_integer function"""
 
-    # If first element => find another integer
-    if list[0] == result and len(list) > 1:
-        result = list[0]
-        i = 1
-        while i < len(list):
-            if list[i] != list[0]:
-                result = list[i]
-                break
-            i += 1
-    
-    return result
+    def test_area(self):
+        """tests successful cases of max_integer"""
+        self.assertEqual(max_integer([1, 2]), 2)
+        self.assertEqual(max_integer([]), None)
+        self.assertEqual(max_integer([1]), 1)
+        self.assertEqual(max_integer([1, 1, 3, 3, 3, 6, 8, 8]), 8)
+        self.assertEqual(max_integer([-1, -2, -3]), -1)
+        self.assertEqual(max_integer([1, 2, 3, 4, 3, 2, 1]), 4)
 
+    def test_errors(self):
+        """tests errors raised by incorrect type arguments"""
+        self.assertRaises(Exception, max_integer, ["string", 1.73, 25, {2}])
+
+    def test_empty(self):
+        """tests errors if argument is none"""
+        self.assertIsNone(max_integer())

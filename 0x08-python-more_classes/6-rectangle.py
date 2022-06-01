@@ -1,21 +1,19 @@
 #!/usr/bin/python3
-"""
-This is a Rectangle class.
-The Rectangle class creates a Rectangle object which has height and width
-and calculates its area, perimeter and prints it with #.
-"""
+'''create un class rectangle'''
 
 
 class Rectangle:
+    '''define class with funtion methode'''
     number_of_instances = 0
 
-    """
-    Initialize Rectangle object with height and width.
-    """
     def __init__(self, width=0, height=0):
-        self.width = width
         self.height = height
+        self.width = width
         Rectangle.number_of_instances += 1
+
+    def __del__(self):
+        Rectangle.number_of_instances -= 1
+        print("Bye rectangle...")
 
     @property
     def width(self):
@@ -23,12 +21,13 @@ class Rectangle:
 
     @width.setter
     def width(self, value):
-        if type(value) is not int:
-            raise TypeError("width must be an integer")
-        elif value < 0:
-            raise ValueError("width must be >= 0")
+        if isinstance(value, int):
+            if value >= 0:
+                self.__width = value
+            else:
+                raise ValueError("width must be >= 0")
         else:
-            self.__width = value
+            raise TypeError("width must be an integer")
 
     @property
     def height(self):
@@ -36,64 +35,33 @@ class Rectangle:
 
     @height.setter
     def height(self, value):
-        if type(value) is not int:
-            raise TypeError("height must be an integer")
-        elif value < 0:
-            raise ValueError("height must be >=0")
+        if isinstance(value, int):
+            if value >= 0:
+                self.__height = value
+            else:
+                raise ValueError("height must be >= 0")
         else:
-            self.__height = value
+            raise TypeError("height must be an integer")
 
-    """
-    Calculate area of Rectangle object.
-    """
     def area(self):
-        return (self.width * self.height)
+        return self.__height * self.__width
 
-    """
-    Calculate perimeter of Rectangle object.
-    """
     def perimeter(self):
-        if (self.width == 0 or self.height == 0):
+        if self.__height == 0 or self.__width == 0:
             return 0
-        return 2 * (self.width + self.height)
+        else:
+            return (self.__width * 2) + (self.__height * 2)
 
-    """
-    Print a Rectangle with #.
-    """
-    def print(self):
-        if (self.width == 0 or self.height == 0):
-            print()
-            return
-        for i in range(self.height):
-            for j in range(self.width):
-                print("#")
-            if i < self.height - 1:
-                print()
-
-    """
-    Return string representation of Rectangle object.
-    """
     def __str__(self):
-        out = ""
-        if (self.width == 0 or self.height == 0):
-            out += "\n"
-            return out
-        for i in range(self.height):
-            for j in range(self.width):
-                out += "#"
-            if i < self.height - 1:
-                out += "\n"
-        return out
+        if self.width == 0 or self.height == 0:
+            return ""
+        else:
+            rect = ""
+            for i in range(self.height):
+                rect += '#' * self.width
+                if i < (self.height - 1):
+                    rect += '\n'
+            return rect
 
-    """
-    Return string representation of Rectangle object.
-    """
     def __repr__(self):
-        return "Rectangle(" + str(self.width) + ", " + str(self.height) + ")\n"
-
-    """
-    Print the message "Bye rectangle..." when a Rectangle object is deleted.
-    """
-    def __del__(self):
-        Rectangle.number_of_instances -= 1
-        print("Bye rectangle...")
+        return 'Rectangle({}, {})'.format(self.width, self.height)

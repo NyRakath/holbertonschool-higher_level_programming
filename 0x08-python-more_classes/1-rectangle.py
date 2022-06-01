@@ -1,17 +1,12 @@
 #!/usr/bin/python3
-"""
-This is a Rectangle class.
-The Rectangle class creates a Rectangle object which has height and width.
-"""
+'''create un class rectangle'''
 
 
 class Rectangle:
-    """
-    Initialize Rectangle object with height and width.
-    """
+    '''define class with funtion methode'''
     def __init__(self, width=0, height=0):
-        self.width = width
         self.height = height
+        self.width = width
 
     @property
     def width(self):
@@ -19,11 +14,13 @@ class Rectangle:
 
     @width.setter
     def width(self, value):
-        if type(value) is not int:
+        if isinstance(value, int):
+            if value >= 0:
+                self.__width = value
+            else:
+                raise ValueError("width must be >= 0")
+        else:
             raise TypeError("width must be an integer")
-        if value < 0:
-            raise ValueError("width must be >= 0")
-        self.__width = value
 
     @property
     def height(self):
@@ -31,8 +28,10 @@ class Rectangle:
 
     @height.setter
     def height(self, value):
-        if type(value)is not int:
+        if isinstance(value, int):
+            if value >= 0:
+                self.__height = value
+            else:
+                raise ValueError("height must be >= 0")
+        else:
             raise TypeError("height must be an integer")
-        if value < 0:
-            raise ValueError("height must be >=0")
-        self.__height = value
